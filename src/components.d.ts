@@ -12,11 +12,13 @@ declare module 'vue' {
     AppBar: typeof import('./components/core/AppBar.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     ChangeRateChip: typeof import('./components/core/ChangeRateChip.vue')['default']
-    copy: typeof import('./components/core/MissionCard copy.vue')['default']
+    copy: typeof import('./components/core/WeaponSelectorOption copy.vue')['default']
+    CreateMissionDialog: typeof import('./components/core/CreateMissionDialog.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     MissionCard: typeof import('./components/core/MissionCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     WeaponSelector: typeof import('./components/core/WeaponSelector.vue')['default']
+    WeaponSelectorOption: typeof import('./components/core/WeaponSelectorOption.vue')['default']
   }
 }

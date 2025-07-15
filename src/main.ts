@@ -9,7 +9,14 @@ import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
-import { AppBar, ChangeRateChip, MissionCard, WeaponSelector } from './components/core'
+import {
+  AppBar,
+  ChangeRateChip,
+  CreateMissionDialog,
+  MissionCard,
+  WeaponSelector,
+  WeaponSelectorOption,
+} from './components/core'
 
 // Icons
 import '@mdi/font/css/materialdesignicons.css'
@@ -26,6 +33,8 @@ app.component('d-app-bar', AppBar);
 app.component('d-change-rate-chip', ChangeRateChip);
 app.component('d-mission-card', MissionCard);
 app.component('d-weapon-selector', WeaponSelector);
+app.component('d-weapon-selector-option', WeaponSelectorOption);
+app.component('d-create-mission-dialog', CreateMissionDialog);
 
 registerPlugins(app)
 

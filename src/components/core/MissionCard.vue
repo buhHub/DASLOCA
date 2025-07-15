@@ -1,8 +1,8 @@
 <template>
-  <v-card color="#F4F4F4" flat width="128">
+  <v-card color="#F4F4F4" flat width="128" max-width="128">
     <template #title>
       <div class="d-flex-column">
-        <div class="chip-wrapper">
+        <div v-if="!props.hideChip" class="chip-wrapper">
           <d-change-rate-chip :value="wear"></d-change-rate-chip>
         </div>
         <span v-if="!props.title">Geen missie</span>
@@ -25,12 +25,14 @@ interface Props {
   title: string | null,
   difficulty: 'EASY' | 'MEDIUM' | 'HARD',
   wear: number | null,
+  hideChip: boolean,
 };
 
 const props = withDefaults(defineProps<Props>(), {
   title: null,
   difficulty: 'EASY',
   wear: null,
+  hideChip: false,
 });
 
 const difficultyIcon = {

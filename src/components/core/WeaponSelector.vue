@@ -168,7 +168,7 @@ const isTail = computed(() => !!tails[props.tail])
 </script>
 
 
-<style>
+<style scoped>
 .airplane-avatar {
   width: 64px;
   height: 64px;
