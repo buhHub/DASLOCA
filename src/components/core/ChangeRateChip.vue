@@ -1,5 +1,5 @@
 <template>
-  <v-chip :color="color" label :prepend-icon="icon" class="px-4">
+  <v-chip :color="color" label :prepend-icon="icon" variant="tonal" class="px-4">
     <span v-if="value">{{ value }}%</span>
     <span v-else>---</span>
   </v-chip>
@@ -44,3 +44,10 @@ const icon = computed(() => {
   }
 })
 </script>
+
+<style lang="scss" scoped>
+:deep(.v-chip__content),
+:deep(.v-chip__prepend) {
+  color: #000;
+}
+</style>

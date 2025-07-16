@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <d-app-bar></d-app-bar>
+    <d-app-bar class="sticky-top"></d-app-bar>
     <router-view />
   </v-app>
 </template>
@@ -22,5 +22,13 @@
 
 .gapped {
   gap: 16px;
+}
+.sticky-top {
+  position: sticky;
+  top: 0px;
+  z-index: 2;
+}
+.fill-width {
+  width: 100% !important;
 }
 </style>

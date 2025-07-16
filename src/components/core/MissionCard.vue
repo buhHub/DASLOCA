@@ -1,20 +1,29 @@
 <template>
-  <v-card color="#F4F4F4" flat width="128" max-width="128">
+  <v-card v-if="props.addMission" color="primary" flat width="160" max-width="160" class="fill-height">
     <template #title>
-      <div class="d-flex-column">
-        <div v-if="!props.hideChip" class="chip-wrapper">
+      <div class="d-flex-row ga-2">
+        <v-icon size="24" color="white">mdi-plus</v-icon>
+        <div class="d-flex-column allow-text-wrapping text-body-1 font-weight-bold">
+          Missie toevoegen
+        </div>
+      </div>
+    </template>
+  </v-card>
+  <v-card v-else color="#F4F4F4" flat width="160" max-width="160" :class="{ 'card__outlined': props.outlined }" class="fill-height">
+    <template #title>
+      <div class="d-flex-column allow-text-wrapping">
+        <div v-if="props.wear || props.showWear" class="chip-wrapper">
           <d-change-rate-chip :value="wear"></d-change-rate-chip>
         </div>
-        <span v-if="!props.title">Geen missie</span>
-        <template v-else>
-          <span>{{ props.title }}</span>
-          <div class="d-flex-row align-center ga-1 text-body-2">
-            {{ props.difficulty }}
-            <v-icon size="14" :color="difficultyIconColor[props.difficulty]">
-              {{ difficultyIcon[props.difficulty] }}
-            </v-icon>
-          </div>
-        </template>
+        <span v-if="!props.title">Geef een missienaam</span>
+        <span v-else>{{ props.title }}</span>
+        <span v-if="props.subtitle" class="text-body-1 font-weight-bold">{{ props.subtitle }}</span>
+        <div v-if="props.difficulty" class="d-flex-row align-center ga-1 text-body-2">
+          {{ props.difficulty }}
+          <v-icon size="14" :color="difficultyIconColor[props.difficulty]">
+            {{ difficultyIcon[props.difficulty] }}
+          </v-icon>
+        </div>
       </div>
     </template>
   </v-card>
@@ -23,16 +32,22 @@
 <script setup lang="ts">
 interface Props {
   title: string | null,
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD',
+  subtitle: string | null,
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | null,
   wear: number | null,
-  hideChip: boolean,
+  showWear: boolean,
+  addMission: boolean,
+  outlined: boolean,
 };
 
 const props = withDefaults(defineProps<Props>(), {
   title: null,
-  difficulty: 'EASY',
+  subtitle: null,
+  difficulty: null,
   wear: null,
-  hideChip: false,
+  showWear: false,
+  addMission: false,
+  outlined: false,
 });
 
 const difficultyIcon = {
@@ -51,5 +66,12 @@ const difficultyIconColor = {
 <style>
 .chip-wrapper{
   display: inline-flex;
+}
+.allow-text-wrapping {
+  text-wrap: auto;
+}
+.card__outlined {
+  background-color: white !important;
+  border: 1px solid #CCC;
 }
 </style>

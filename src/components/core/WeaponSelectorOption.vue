@@ -40,7 +40,7 @@
           block
           disabled
         >
-          Selecteer deze kist
+          Geselecteerd
         </v-btn>
         <v-btn
           v-else

@@ -1,8 +1,13 @@
 <template>
-  <div class="d-flex-column">
+  <div class="d-flex-column appbar">
     <v-img :src="header" height="113"></v-img>
     <v-toolbar color="secondary">
-      <v-app-bar-title>[Breadcrumbs]</v-app-bar-title>
+      <v-app-bar-title>
+        <div class="d-flex-row align-center ga-2">
+          <v-icon size="18">mdi-home</v-icon>
+          Home (DASLOCA)
+        </div>
+      </v-app-bar-title>
       <div class="d-class-row gapped mr-4">
         <v-btn variant="text" prepend-icon="mdi-airplane-cog">
           Beheer kisten
@@ -18,3 +23,9 @@
 <script setup lang="ts">
 import header from '../../assets/header.png'
 </script>
+
+<style lang="scss" scoped>
+.appbar {
+  background-color: white;
+}
+</style>

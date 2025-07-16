@@ -1,14 +1,25 @@
 <template>
-  <v-card v-if="showDialog" width="800">
+  <v-card v-if="showDialog" width="840">
     <v-row>
       <v-col cols="9">
-        <v-card-title>Missie aanmaken</v-card-title>
-        <v-card-subtitle>
-          Tijdslot {{ props.timeslot }} - Msisieset {{ props.missionset }}
-        </v-card-subtitle>
+        <v-card-item>
+          <div class="d-flex-row justify-space-between">
+            <div>
+              <v-card-title>
+                Missie aanmaken
+              </v-card-title>
+              <v-card-subtitle>
+                Tijdslot {{ props.timeslot }} - Missieset {{ props.missionset }}
+              </v-card-subtitle>
+            </div>
+            <v-btn variant="flat" @click="$emit('close')">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+        </v-card-item>
         <v-card-text>
           <div class="d-flex-column gapped">
-            <v-text-field v-model="missionName" label="Naam" placeholder="OP Wolf" persistent-placeholder hide-details clearable></v-text-field>
+            <v-text-field v-model="missionName" label="Naam" placeholder="OP Wolf" persistent-placeholder hide-details clearable autofocus></v-text-field>
             <v-text-field v-model="missionDescription" label="Beschrijving" placeholder="Ingress" persistent-placeholder hide-details
               clearable></v-text-field>
             <v-btn-toggle v-model="missionDifficulty" variant="outlined" divided mandatory class="d-flex-row">
@@ -26,10 +37,10 @@
               </v-btn>
             </v-btn-toggle>
             <div class="d-flex-row justify-space-between">
-              <v-btn color="grey-darken-3" variant="outlined">
+              <v-btn color="grey-darken-3" variant="outlined" @click="$emit('close')">
                 Annuleren
               </v-btn>
-              <v-btn color="primary">
+              <v-btn color="primary" :disabled="!missionName || !missionDifficulty" @click="emitForm()">
                 Missie opslaan
               </v-btn>
             </div>
@@ -45,7 +56,7 @@
           <v-card-text class="flex-grow-0">
             <d-mission-card
               :title="missionName"
-              :description="missionDescription"
+              :subtitle="missionDescription"
               :difficulty="missionDifficulty"
               hide-chip
             ></d-mission-card>
@@ -67,13 +78,25 @@ const props = withDefaults(defineProps<Props>(), {
   missionset: null,
 });
 
+const emit = defineEmits(['close', 'save'])
+
 const showDialog = computed(() => {
-  return !!props.timeslot && !!props.missionset;
+  return (!!props.timeslot || props.timeslot === 0)
+    && (!!props.missionset || props.missionset === 0);
 });
 
 const missionName = ref('');
 const missionDescription = ref('');
 const missionDifficulty = ref('');
+
+const emitForm = () => {
+  const formData = {
+    title: missionName.value,
+    subtitle: missionDescription.value,
+    difficulty: missionDifficulty.value,
+  };
+  emit('save', formData);
+};
 </script>
 
 <style scoped>
