@@ -38,10 +38,16 @@
             color="primary"
             prepend-icon="mdi-swap-horizontal"
             variant="outlined"
+            @click="$emit('edit', props.fobToAircraftId)"
           >
             Wissel kist
           </v-btn>
-          <span class="text-decoration-underline">Annuleer kist</span>
+          <span
+            class="text-decoration-underline link-text"
+            @click="$emit('remove', props.fobToAircraftId)"
+          >
+            Annuleer kist
+          </span>
         </div>
       </div>
     </template>
@@ -67,6 +73,7 @@
           <v-btn
             color="primary"
             block
+            @click="$emit('edit', null)"
           >
             Kies een kist
           </v-btn>
@@ -83,13 +90,17 @@ import CH47image from '../../assets/systems/CH47.svg';
 
 interface Props {
   tail?: string | null,
+  fobToAircraftId?: string | null,
   error?: boolean,
 };
 
 const props = withDefaults(defineProps<Props>(), {
   tail: null,
+  fobToAircraftId: null,
   error: false,
 });
+
+const emit = defineEmits(['edit']);
 
 const difficultyIcon = {
   EASY: 'mdi-circle-outline',
@@ -190,5 +201,8 @@ const isTail = computed(() => !!tails[props.tail])
 }
 .double-error {
   background-color: #C00A0D0F;
+}
+.link-text {
+  cursor: pointer;
 }
 </style>

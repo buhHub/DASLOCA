@@ -142,17 +142,26 @@ const clearSelected = () => {
 const missionBucket = ref([]);
 const createMission = (missionData) => {
   if (!showMissionDialog) return;
-  const existingMission = missionBucket.value
-    .find((mission) => mission.timeslot === missionData.timeslot && mission.missionset === missionData.missionset);
-  if (existingMission) {
-    missionBucket.value = missionBucket.value
-      .filter((mission) => mission.timeslot === existingMission.timeslot && mission.missionset === existingMission.misisonset);
+  const existingMissionIndex = missionBucket.value
+    .findIndex((mission) => (mission.timeslot === selectedTimeslot.value)
+       && (mission.missionset === selectedMissionSet.value));
+  if (existingMissionIndex >= 0) {
+    missionBucket.value = missionBucket.value.toSpliced(
+      existingMissionIndex,
+      1,
+      {
+        ...missionData,
+        timeslot: selectedTimeslot.value,
+        missionset: selectedMissionSet.value,
+      }
+    );
+  } else {
+    missionBucket.value.push({
+      ...missionData,
+      timeslot: selectedTimeslot.value,
+      missionset: selectedMissionSet.value,
+    });
   }
-  missionBucket.value.push({
-    ...missionData,
-    timeslot: selectedTimeslot.value,
-    missionset: selectedMissionSet.value,
-  });
   clearSelected();
 };
 const getMission = (timeslot, missionset) => {
@@ -273,7 +282,7 @@ function duplicateMissionSet(nMissionSet) {
   });
 };
 
-function pruneMissionSet() {
+function pruneMissionSets() {
   [...Array(nMissionSets.value).keys()].toReversed().forEach((iMissionSet) => {
     const missionsInMissionSet = missionBucket.value.filter((mission) => mission.missionset === iMissionSet);
     if (missionsInMissionSet.length === 0) {
@@ -284,7 +293,7 @@ function pruneMissionSet() {
 
 function pruneMissionsTable() {
   pruneTimeslots();
-  pruneMissionSet();
+  pruneMissionSets();
 };
 
 const columnActions = [
@@ -333,7 +342,7 @@ watch(missionBucket, (nValue, oValue) => {
 }, { deep: true });
 
 watch(props.fobMissions, (nValue, oValue) => {
-  missionBucket.value = nValue;
+  missionBucket.value = toRaw(nValue);
 }, { deep: true });
 
 const missionsPinia = useMissionsStore();

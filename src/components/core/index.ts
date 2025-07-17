@@ -2,7 +2,8 @@ import AppBar from './appbar.vue';
 import ChangeRateChip from './ChangeRateChip.vue';
 import MissionCard from './MissionCard.vue';
 import WeaponSelector from './WeaponSelector.vue';
-import WeaponSelectorOption from './WeaponSelectorOption.vue';
+import AircraftSelectorCard from './AircraftSelectorCard.vue';
+import AircraftSelectorDialog from './AircraftSelectorDialog.vue';
 import CreateMissionDialog from './CreateMissionDialog.vue';
 import CreateFOBMissions from './CreateFOBMissions.vue';
 import SideBar from './SideBar.vue';
@@ -13,7 +14,8 @@ export {
   ChangeRateChip,
   MissionCard,
   WeaponSelector,
-  WeaponSelectorOption,
+  AircraftSelectorCard,
+  AircraftSelectorDialog,
   CreateMissionDialog,
   CreateFOBMissions,
   SideBar,

@@ -46,6 +46,7 @@
           v-else
           color="primary"
           block
+          @click="$emit('select', tail)"
         >
           Selecteer deze kist
         </v-btn>
@@ -72,6 +73,8 @@ const props = withDefaults(defineProps<Props>(), {
   tail: null,
   disabled: false,
 });
+
+const emit = defineEmits(['select']);
 
 const getWeaponFromTail = computed(() => {
   if (!props.tail) return null;

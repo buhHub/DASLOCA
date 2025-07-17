@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 
 export const useFobsStore = defineStore('fobs', {
+  persist: true,
   state: () => ({
     data: [
       {

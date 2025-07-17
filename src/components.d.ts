@@ -8,6 +8,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AircraftSelectorCard: typeof import('./components/core/AircraftSelectorCard.vue')['default']
+    AircraftSelectorDialog: typeof import('./components/core/AircraftSelectorDialog.vue')['default']
     Appbar: typeof import('./components/core/appbar.vue')['default']
     AppBar: typeof import('./components/core/AppBar.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']

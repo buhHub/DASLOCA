@@ -3,7 +3,7 @@
     <d-side-bar></d-side-bar>
     <!-- <HelloWorld/> -->
 
-    <div class="d-flex-column mx-8 my-8 ga-8 fill-width">
+    <div class="d-flex-column ma-8 ga-8 fill-width">
 
       <!-- Header -->
       <div class="d-flex-column">
@@ -73,6 +73,8 @@
   const fobName = ref('');
   const fobStartDate = ref('');
 
+  const router = useRouter();
+
   watch(fobMissions, (nValue, oValue) => {
     console.log(nValue);
   }, { deep: true });
@@ -82,9 +84,7 @@
   })
 
   function saveFob() {
-    console.log('triggered')
     if (disableSaveFob.value) return;
-    console.log('tes')
     const fobId = crypto.randomUUID();
     const payload = {
       id: fobId,
@@ -96,10 +96,11 @@
     fobMissions.value.forEach(mission => {
       missionsPinia.addData({
         ...mission,
-        fob: fobId,
+        fobId,
         id: crypto.randomUUID(),
       });
     });
+    router.push({ path: '/' });
   }
 </script>
 

@@ -18,7 +18,8 @@ import {
   MissionCard,
   SideBar,
   WeaponSelector,
-  WeaponSelectorOption,
+  AircraftSelectorCard,
+  AircraftSelectorDialog,
 } from './components/core'
 
 // Icons
@@ -36,7 +37,8 @@ app.component('d-app-bar', AppBar);
 app.component('d-change-rate-chip', ChangeRateChip);
 app.component('d-mission-card', MissionCard);
 app.component('d-weapon-selector', WeaponSelector);
-app.component('d-weapon-selector-option', WeaponSelectorOption);
+app.component('d-aircraft-selector-card', AircraftSelectorCard);
+app.component('d-aircraft-selector-dialog', AircraftSelectorDialog);
 app.component('d-create-mission-dialog', CreateMissionDialog);
 app.component('d-create-fob-missions', CreateFOBMissions);
 app.component('d-side-bar', SideBar);

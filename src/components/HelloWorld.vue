@@ -2,6 +2,9 @@
   <v-container class="fill-height" fluid>
     <div class="d-flex-column ga-2">
       <div class="d-flex-row ga-2">
+        <d-aircraft-selector-dialog v-model="dialog"></d-aircraft-selector-dialog>
+      </div>
+      <div class="d-flex-row ga-2">
         <d-change-rate-chip></d-change-rate-chip>
         <d-change-rate-chip :value="3"></d-change-rate-chip>
         <d-change-rate-chip :value="16"></d-change-rate-chip>
@@ -27,9 +30,9 @@
         <d-weapon-selector tail="D-472" error></d-weapon-selector>
       </div>
       <div class="d-flex-row ga-2">
-        <d-weapon-selector-option></d-weapon-selector-option>
-        <d-weapon-selector-option tail="Q-39"></d-weapon-selector-option>
-        <d-weapon-selector-option tail="Q-39" disabled></d-weapon-selector-option>
+        <d-aircraft-selector-card></d-aircraft-selector-card>
+        <d-aircraft-selector-card tail="Q-39"></d-aircraft-selector-card>
+        <d-aircraft-selector-card tail="Q-39" disabled></d-aircraft-selector-card>
       </div>
       <div class="d-flex-row ga-2">
         <d-create-fob-missions></d-create-fob-missions>
@@ -40,4 +43,5 @@
 
 <script setup lang="ts">
 const a = 2;
+const dialog = ref(false);
 </script>
