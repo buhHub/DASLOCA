@@ -82,8 +82,8 @@ import AS532image from '../../assets/systems/AS532.svg';
 import CH47image from '../../assets/systems/CH47.svg';
 
 interface Props {
-  tail: string | null,
-  error: boolean,
+  tail?: string | null,
+  error?: boolean,
 };
 
 const props = withDefaults(defineProps<Props>(), {

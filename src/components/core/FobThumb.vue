@@ -27,8 +27,8 @@
 <script setup lang="ts">
   import { useFobsStore } from '../../stores/fobs';
   interface Props {
-    fobId: string,
-    active: boolean,
+    fobId?: string,
+    active?: boolean,
   };
   
   const props = withDefaults(defineProps<Props>(), {

@@ -91,8 +91,7 @@
       @update:model-value="(state) => { if (!state) { clearSelected() } }"
     >
       <d-create-mission-dialog
-        :timeslot="selectedTimeslot + 1"
-        :missionset="selectedMissionSet + 1"
+        v-bind="{ ...selectedMission, timeslot: selectedTimeslot, missionset: selectedMissionSet }"
         @save="(data) => createMission(data)"
         @close="clearSelected()"
       ></d-create-mission-dialog>
@@ -103,8 +102,8 @@
 <script setup lang="ts">
 import { useMissionsStore } from '../../stores/missions';
 interface Props {
-  timeslot: number | null,
-  missionset: number | null,
+  timeslot?: number | null,
+  missionset?: number | null,
   fobMissions: Array,
 };
 
@@ -121,6 +120,10 @@ const nMissionSets = ref(4);
 
 const selectedTimeslot = ref(null);
 const selectedMissionSet = ref(null);
+
+const selectedMission = computed(() => {
+  return missionBucket.value.find((mission) => mission.timeslot === selectedTimeslot.value && mission.missionset === selectedMissionSet.value);
+});
 
 const showMissionDialog = computed(
   () => (!!selectedMissionSet.value || selectedMissionSet.value === 0)
@@ -139,6 +142,12 @@ const clearSelected = () => {
 const missionBucket = ref([]);
 const createMission = (missionData) => {
   if (!showMissionDialog) return;
+  const existingMission = missionBucket.value
+    .find((mission) => mission.timeslot === missionData.timeslot && mission.missionset === missionData.missionset);
+  if (existingMission) {
+    missionBucket.value = missionBucket.value
+      .filter((mission) => mission.timeslot === existingMission.timeslot && mission.missionset === existingMission.misisonset);
+  }
   missionBucket.value.push({
     ...missionData,
     timeslot: selectedTimeslot.value,
@@ -344,7 +353,7 @@ const log = (a) => console.log(a);
 <style scoped>
 .missionset-container {
   display: grid;
-  grid-template-rows: 100px repeat(var(--n-missionsets), 144px);
+  grid-template-rows: 100px repeat(var(--n-missionsets), 160px);
   grid-template-columns: 200px repeat(var(--n-timeslots), 184px);
 }
 

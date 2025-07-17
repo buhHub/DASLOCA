@@ -11,18 +11,27 @@
   </v-card>
   <v-card v-else color="#F4F4F4" flat width="160" max-width="160" :class="{ 'card__outlined': props.outlined }" class="fill-height">
     <template #title>
-      <div class="d-flex-column allow-text-wrapping">
-        <div v-if="props.wear || props.showWear" class="chip-wrapper">
-          <d-change-rate-chip :value="wear"></d-change-rate-chip>
+      <div class="d-flex-column justify-space-between fill-height">
+        <div class="d-flex-column allow-text-wrapping">
+          <div v-if="props.wear || props.showWear" class="chip-wrapper">
+            <d-change-rate-chip :value="wear"></d-change-rate-chip>
+          </div>
+          <template v-if="!props.title">
+            <span v-if="props.showWear">Geen missie</span>
+            <span v-else>Geef een missienaam</span>
+          </template>
+          <span v-else>{{ props.title }}</span>
+          <span v-if="props.subtitle" class="text-body-1 font-weight-bold">{{ props.subtitle }}</span>
+          <div v-if="props.difficulty" class="d-flex-row align-center ga-1 text-body-2">
+            {{ props.difficulty }}
+            <v-icon size="14" :color="difficultyIconColor[props.difficulty]">
+              {{ difficultyIcon[props.difficulty] }}
+            </v-icon>
+          </div>
         </div>
-        <span v-if="!props.title">Geef een missienaam</span>
-        <span v-else>{{ props.title }}</span>
-        <span v-if="props.subtitle" class="text-body-1 font-weight-bold">{{ props.subtitle }}</span>
-        <div v-if="props.difficulty" class="d-flex-row align-center ga-1 text-body-2">
-          {{ props.difficulty }}
-          <v-icon size="14" :color="difficultyIconColor[props.difficulty]">
-            {{ difficultyIcon[props.difficulty] }}
-          </v-icon>
+        <div v-if="props.outlined" class="d-flex-row ga-1 align-center justify-end">
+          <v-icon size="12">mdi-pencil</v-icon>
+          <span class="text-caption text-decoration-underline">Bewerk</span>
         </div>
       </div>
     </template>
@@ -31,13 +40,13 @@
 
 <script setup lang="ts">
 interface Props {
-  title: string | null,
-  subtitle: string | null,
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | null,
-  wear: number | null,
-  showWear: boolean,
-  addMission: boolean,
-  outlined: boolean,
+  title?: string | null,
+  subtitle?: string | null,
+  difficulty?: 'EASY' | 'MEDIUM' | 'HARD' | null,
+  wear?: number | null,
+  showWear?: boolean,
+  addMission?: boolean,
+  outlined?: boolean,
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -63,7 +72,7 @@ const difficultyIconColor = {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .chip-wrapper{
   display: inline-flex;
 }
@@ -73,5 +82,8 @@ const difficultyIconColor = {
 .card__outlined {
   background-color: white !important;
   border: 1px solid #CCC;
+}
+:deep(.v-card-item), :deep(.v-card-item__content), :deep(.v-card-title) {
+  height: 100%;
 }
 </style>

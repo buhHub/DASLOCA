@@ -9,7 +9,7 @@
                 Missie aanmaken
               </v-card-title>
               <v-card-subtitle>
-                Tijdslot {{ props.timeslot }} - Missieset {{ props.missionset }}
+                Tijdslot {{ props.timeslot + 1 }} - Missieset {{ props.missionset + 1 }}
               </v-card-subtitle>
             </div>
             <v-btn variant="flat" @click="$emit('close')">
@@ -69,13 +69,19 @@
 
 <script setup lang="ts">
 interface Props {
-  timeslot: number | null,
-  missionset: number | null,
+  timeslot?: number | null,
+  missionset?: number | null,
+  title?: string | null,
+  subtitle?: string | null,
+  difficulty?: string | null,
 };
 
 const props = withDefaults(defineProps<Props>(), {
   timeslot: null,
   missionset: null,
+  title: '',
+  subtitle: '',
+  difficulty: '',
 });
 
 const emit = defineEmits(['close', 'save'])
@@ -85,9 +91,9 @@ const showDialog = computed(() => {
     && (!!props.missionset || props.missionset === 0);
 });
 
-const missionName = ref('');
-const missionDescription = ref('');
-const missionDifficulty = ref('');
+const missionName = ref(props.title);
+const missionDescription = ref(props.subtitle);
+const missionDifficulty = ref(props.difficulty);
 
 const emitForm = () => {
   const formData = {
