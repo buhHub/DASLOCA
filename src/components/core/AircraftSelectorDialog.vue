@@ -99,7 +99,7 @@
   function disableAircraft(aircraftId) {
     return fobToAircraftsPinia.getAll
       .filter((unit) => unit.missionset === props.missionset && props.fob.id === unit.fobId)
-      .some((unit) => unit.aircraft === aircraftId);
+      .some((unit) => unit.aircraftId === aircraftId);
   }
 </script>
 
