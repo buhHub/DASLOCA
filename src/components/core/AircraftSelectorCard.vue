@@ -31,7 +31,7 @@
           <div class="d-flex-row ga-4 align-center justify-center">
             <d-change-rate-chip :value="aircraft.wear"></d-change-rate-chip>
             <v-icon>mdi-chevron-right</v-icon>
-            <d-change-rate-chip :value="12"></d-change-rate-chip>
+            <d-change-rate-chip :value="props.expectedWear"></d-change-rate-chip>
           </div>
         </div>
         <v-btn
@@ -65,11 +65,13 @@ const tailsPinia = useTailsStore();
 interface Props {
   tail: string | null,
   disabled: boolean,
+  expectedWear: number | null,
 };
 
 const props = withDefaults(defineProps<Props>(), {
   tail: null,
   disabled: false,
+  expectedWear: null,
 });
 
 const emit = defineEmits(['select']);

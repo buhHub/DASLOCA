@@ -13,6 +13,7 @@ export function calculateChangeRate(
   multiplier: number = 1,
 ) {
   if (fob === null || missions === null || nTimeslots === null || aircraft === null) return [];
+  if (fob === undefined || missions === undefined || nTimeslots === undefined || aircraft === undefined) return [];
   // Calculating the change rate over time is now independent from any model
   // and is only intended for visual understanding of the application.
 

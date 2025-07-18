@@ -45,6 +45,9 @@
                 <d-aircraft-selector-card
                   :tail="aircraft.tail"
                   :disabled="disableAircraft(aircraft.id)"
+                  :expected-wear="Math.max(...calculateChangeRate(
+                    props.fob, fobMissionByMs, props.nTimeslots, aircraft,
+                  ))"
                   @select="$emit('select', {
                     id: props.selectedId,
                     fobId: props.fob.id,
@@ -62,9 +65,12 @@
 </template>
 
 <script setup lang="ts">
+  import { calculateChangeRate } from '../../consts/helpers';
   import { useTailsStore } from '../../stores/tails';
+  import { useMissionsStore } from '../../stores/missions';
   import { useFobToAircraftsStore } from '../../stores/fobToAircrafts';
   const tailsPinia = useTailsStore();
+  const missionsPinia = useMissionsStore();
   const fobToAircraftsPinia = useFobToAircraftsStore();
 
   const model = defineModel()
@@ -72,12 +78,14 @@
     fob: Object;
     missionset?: number | null,
     selectedId?: string | null,
+    nTimeslots: number | null,
   };
 
   const props = withDefaults(defineProps<Props>(), {
     fob: () => ({}),
     missionset: null,
     selectedId: null,
+    nTimeslots: null,
   })
 
   const emit = defineEmits(['select']);
@@ -94,13 +102,18 @@
 
   function tailsByAircraftType(typeName) {
     return tailsPinia.getAll.filter((tail) => tail.name === typeName);
-  }
+  };
 
   function disableAircraft(aircraftId) {
     return fobToAircraftsPinia.getAll
       .filter((unit) => unit.missionset === props.missionset && props.fob.id === unit.fobId)
       .some((unit) => unit.aircraftId === aircraftId);
-  }
+  };
+
+  const fobMissionByMs = computed(() => {
+    return missionsPinia.getMissionsByFobId(props.fob.id)
+      .filter((mission) => mission.missionset === props.missionset) ?? [];
+  });
 </script>
 
 <style lang="scss" scoped>

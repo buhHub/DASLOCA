@@ -8,6 +8,7 @@
       :fob="fob"
       :missionset="editingMissionSet"
       :selectedId="editingMissionSetAircraftId"
+      :n-timeslots="nTimeslots"
       @select="changeAircraft($event)"
     ></d-aircraft-selector-dialog>
 
@@ -61,6 +62,10 @@
             v-for="(iTimeslot) in [...Array(nTimeslots).keys()]"
             :key="`timeslot-${iTimeslot}-${iMissionSet}`"
             v-bind="{ ...fobMissionByTsMs(iTimeslot, iMissionSet) }"
+            :wear="calculateChangeRate(
+              fob, fobMissionByMs(iMissionSet), nTimeslots,
+              tailsPinia.getById(coupling.aircraftId),
+            )[iTimeslot + 1]"
             show-wear
           ></d-mission-card>
         </div>
@@ -94,10 +99,13 @@
 
 <script lang="ts" setup>
   import { useFobsStore } from '../stores/fobs';
+  import { useTailsStore } from '../stores/tails';
   import { useMissionsStore } from '../stores/missions';
   import { useFobToAircraftsStore } from '../stores/fobToAircrafts';
+  import { calculateChangeRate } from '../consts/helpers';
 
   const fobsPinia = useFobsStore();
+  const tailsPinia = useTailsStore();
   const missionsPinia = useMissionsStore();
   const fobToAircraftsPinia = useFobToAircraftsStore();
 
@@ -112,7 +120,7 @@
     return fobsPinia.getById(fobId.value);
   });
   const fobMissions = computed(() => {
-    if (!fobId.value) return {};
+    if (!fobId.value) return [];
     return missionsPinia.getMissionsByFobId(fobId.value);
   });
 
@@ -128,6 +136,10 @@
   function fobMissionByTsMs(ts, ms) {
     return fobMissions.value
       .find((mission) => mission.timeslot === ts && mission.missionset === ms) ?? {};
+  }
+  function fobMissionByMs(ms) {
+    return fobMissions.value
+      .filter((mission) => mission.missionset === ms) ?? [];
   }
 
   function fobAircraftsByMs(ms) {
@@ -181,5 +193,5 @@
       editingMissionSet.value = null;
       editingMissionSetAircraftId.value = null;
     }
-  })
+  });
 </script>

@@ -6,8 +6,6 @@
       <div class="d-flex-column">
         <span class="text-h4 font-weight-bold">Missieset #{{ missionSet + 1 }}</span>
         <span class="text-h5 font-weight-bold">{{ fob?.name }}</span>
-        {{ changeRate }}
-        {{getRates(wordToAsciiProductNoZero(selectedComponent))}}
       </div>
       <div class="d-flex-row ga-2">
         <d-weapon-selector
@@ -195,19 +193,16 @@
   const components = ['Stabilisator', 'Landingsstel', 'Motoren', 'Radar', 'Transmissie'];
   const selectedComponent = ref(components[0]);
 
-  const changeRate = computed(() => {
-    return calculateChangeRate(
-      fob.value, missions.value, nTimeslots.value,
-      tailsPinia.getById(coupling.value?.aircraftId),
-    );
-  });
-
   function getRates(multiplier) {
     return calculateChangeRate(
       fob.value, missions.value, nTimeslots.value,
       tailsPinia.getById(coupling.value?.aircraftId), multiplier,
     );
   };
+
+  const changeRate = computed(() => {
+    return getRates(1);
+  });
 
   const changeRateChartOptions = {
     responsive: true,
