@@ -37,7 +37,12 @@
         <!-- Missionset header -->
         <div class="d-flex-row align-end ga-2">
           <span class="text-body-1 font-weight-bold">Missieset #{{ iMissionSet + 1 }}</span>
-          <span class="text-caption text-decoration-underline">Toon details</span>
+          <span
+            class="text-caption text-decoration-underline clickable"
+            @click="router.push({ path: '/viewmissionset', query: { fobId, ms: iMissionSet } })"
+          >
+            Toon details
+          </span>
         </div>
 
         <!-- Missionset row -->
@@ -95,7 +100,10 @@
   const fobsPinia = useFobsStore();
   const missionsPinia = useMissionsStore();
   const fobToAircraftsPinia = useFobToAircraftsStore();
+
+  const router = useRouter();
   const route = useRoute();
+
   const fobId = computed(() => {
     return route.query.id;
   });

@@ -31,4 +31,7 @@
 .fill-width {
   width: 100% !important;
 }
+.clickable {
+  cursor: pointer;
+}
 </style>

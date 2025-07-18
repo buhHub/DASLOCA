@@ -3,7 +3,7 @@
     <v-img :src="header" height="113"></v-img>
     <v-toolbar color="secondary">
       <v-app-bar-title>
-        <div class="d-flex-row align-center ga-2">
+        <div class="d-flex-row align-center ga-2 clickable" @click="router.push({ path: '/' })">
           <v-icon size="18">mdi-home</v-icon>
           Home (DASLOCA)
         </div>
@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import header from '../../assets/header.png'
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped>

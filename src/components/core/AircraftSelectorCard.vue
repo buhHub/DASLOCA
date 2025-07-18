@@ -1,6 +1,6 @@
 <template>
   <v-card
-    v-if="getWeaponFromTail"
+    v-if="aircraft"
     flat
     width="320"
     class="airplane-selector-option"
@@ -12,15 +12,15 @@
           <div class="airplane-avatar">
             <v-img
               height="40"
-              :src="getWeaponFromTail?.image"
+              :src="aircraft.image"
             ></v-img>
           </div>
           <div class="d-flex-column pr-8">
             <span class="text-body-1 font-weight-medium">
-              {{ getWeaponFromTail?.name }}
+              {{ aircraft.name }}
             </span>
             <span class="text-body-1 font-weight-medium">
-              {{ tail }}
+              {{ aircraft.tail }}
             </span>
           </div>
         </div>
@@ -29,7 +29,7 @@
             Verwachte change-rate
           </span>
           <div class="d-flex-row ga-4 align-center justify-center">
-            <d-change-rate-chip :value="12"></d-change-rate-chip>
+            <d-change-rate-chip :value="aircraft.wear"></d-change-rate-chip>
             <v-icon>mdi-chevron-right</v-icon>
             <d-change-rate-chip :value="12"></d-change-rate-chip>
           </div>
@@ -59,9 +59,8 @@
 import AH64image from '../../assets/systems/AH64.svg';
 import AS532image from '../../assets/systems/AS532.svg';
 import CH47image from '../../assets/systems/CH47.svg';
-
-import { systems } from '../../consts/weapons';
-import { tails } from '../../consts/tails';
+import { useTailsStore } from '../../stores/tails';
+const tailsPinia = useTailsStore();
 
 interface Props {
   tail: string | null,
@@ -75,11 +74,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['select']);
 
-const getWeaponFromTail = computed(() => {
+const aircraft = computed(() => {
   if (!props.tail) return null;
-  if (!tails[props.tail]) return null;
-  return systems[tails[props.tail]];
-})
+  return tailsPinia.getByTail(props.tail);
+});
 </script>
 
 

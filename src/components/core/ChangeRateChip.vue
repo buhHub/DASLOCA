@@ -1,7 +1,7 @@
 <template>
   <v-chip :color="color" label :prepend-icon="icon" variant="tonal" class="px-4">
-    <span v-if="value">{{ value }}%</span>
-    <span v-else>---</span>
+    <span v-if="invalidValue">---</span>
+    <span v-else>{{ props.value }}%</span>
   </v-chip>
 </template>
 
@@ -12,13 +12,17 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   value: null,
+});
+
+const invalidValue = computed(() => {
+  return props.value === null || props.value === undefined;
 })
 
 const color = computed(() => {
-  if (!props.value) {
+  if (invalidValue.value) {
     return '#000';
   }
-  if (props.value > 0 && props.value <= 15) {
+  if (props.value >= 0 && props.value <= 15) {
     return 'success'
   }
   if (props.value > 15 && props.value <= 30) {
@@ -30,10 +34,10 @@ const color = computed(() => {
 })
 
 const icon = computed(() => {
-  if (!props.value) {
+  if (invalidValue.value) {
     return 'mdi-border-none-variant';
   }
-  if (props.value > 0 && props.value <= 15) {
+  if (props.value >= 0 && props.value <= 15) {
     return 'mdi-shield-airplane'
   }
   if (props.value > 15 && props.value <= 30) {

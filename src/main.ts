@@ -22,6 +22,17 @@ import {
   AircraftSelectorDialog,
   GraphComponentMiniCard,
 } from './components/core'
+import { Line } from 'vue-chartjs';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
 
 // Icons
 import '@mdi/font/css/materialdesignicons.css'
@@ -45,6 +56,16 @@ app.component('d-create-fob-missions', CreateFOBMissions);
 app.component('d-side-bar', SideBar);
 app.component('d-fob-thumb', FobThumb);
 app.component('d-graph-component-mini-card', GraphComponentMiniCard);
+app.component('d-line-chart', Line);
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+)
 
 registerPlugins(app)
 

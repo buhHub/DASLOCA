@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { systems } from '../consts/weapons';
 
-function mapTypeToWeapon(aircraft) {
+function mapTypeToWeapon(aircraft: any) {
   if (!aircraft) return aircraft;
   return {
     ...aircraft,

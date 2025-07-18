@@ -1,17 +1,19 @@
 <template>
-  <div v-if="missionSet" class="d-flex-column ga-4 ma-8 view-mission-set-container">
+  <div v-if="missionSet !== null" class="d-flex-column ga-4 ma-8 view-mission-set-container">
 
     <!-- Header -->
     <div class="d-flex-row justify-space-between">
       <div class="d-flex-column">
-        <span class="text-h4 font-weight-bold">Missieset #{{ missionSet }}</span>
+        <span class="text-h4 font-weight-bold">Missieset #{{ missionSet + 1 }}</span>
         <span class="text-h5 font-weight-bold">{{ fob?.name }}</span>
+        {{ changeRate }}
+        {{getRates(wordToAsciiProductNoZero(selectedComponent))}}
       </div>
       <div class="d-flex-row ga-2">
         <d-weapon-selector
           v-if="coupling"
-          :aircraft-id="coupling.aircraftId"
-          :fob-to-aircraft-id="coupling.id"
+          :aircraft-id="coupling?.aircraftId"
+          :fob-to-aircraft-id="coupling?.id"
           @edit="openAircraftSelector(iMissionSet, $event)"
           @remove="changeAircraft({ id: $event, aircraftId: null })"
         ></d-weapon-selector>
@@ -19,6 +21,7 @@
           v-for="(iTimeslot) in [...Array(nTimeslots).keys()]"
           :key="`timeslot-${iTimeslot}`"
           v-bind="{ ...getMissionByTs(iTimeslot) }"
+          :wear="changeRate[iTimeslot + 1]"
           show-wear
         ></d-mission-card>
       </div>
@@ -37,11 +40,10 @@
       <v-col cols="6" class="fill-height">
         <v-card
           flat
-          variant="outlined"
-          class="d-flex-column fill-height"
+          class="d-flex-column fill-height component"
         >
           <v-card-item>
-            <div class="d-flex-row justify-space-between">
+            <div class="d-flex-row justify-space-between align-center">
               <div>
                 <v-card-title>
                   Change-rate
@@ -50,13 +52,19 @@
                   De kans dat een kist in onderhoud moet
                 </v-card-subtitle>
               </div>
-              <v-btn variant="flat" @click="$emit('close')">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
+              <div class="d-flex-row ga-2 align-center">
+                <d-change-rate-chip :value="Math.min(...changeRate)"></d-change-rate-chip>
+                <v-icon size="16">mdi-chevron-double-right</v-icon>
+                <d-change-rate-chip :value="Math.max(...changeRate)"></d-change-rate-chip>
+              </div>
             </div>
           </v-card-item>
-          <v-card-text class="d-flex flex-grow-1">
-            <v-sheet border rounded color="grey" class="flex-grow-1"></v-sheet>
+          <v-card-text class="d-flex flex-grow-1 pa-4">
+            <d-line-chart
+              :data="changeRateChart"
+              :options="changeRateChartOptions"
+              class="pa-4"
+            ></d-line-chart>
           </v-card-text>
         </v-card>
       </v-col>
@@ -65,8 +73,7 @@
       <v-col cols="6" class="fill-height">
         <v-card
           flat
-          variant="outlined"
-          class="d-flex-column fill-height"
+          class="d-flex-column fill-height component"
         >
           <v-card-item>
             <div class="d-flex-row justify-space-between">
@@ -75,26 +82,37 @@
                   Componenten
                 </v-card-title>
                 <v-card-subtitle>
-                  {{ selected }}
+                  {{ selectedComponent }}
                 </v-card-subtitle>
               </div>
-              <v-btn variant="flat" @click="$emit('close')">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
+              <div class="d-flex-row ga-2 align-center">
+                <d-change-rate-chip
+                  :value="Math.min(...getRates(wordToAsciiProductNoZero(selectedComponent)))"
+                ></d-change-rate-chip>
+                <v-icon size="16">mdi-chevron-double-right</v-icon>
+                <d-change-rate-chip
+                  :value="Math.max(...getRates(wordToAsciiProductNoZero(selectedComponent)))"
+                ></d-change-rate-chip>
+              </div>
             </div>
           </v-card-item>
           <v-card-text class="d-flex flex-grow-1">
-            <v-sheet border rounded color="grey" class="flex-grow-1"></v-sheet>
+            <d-line-chart
+              :data="getChartData(getRates(wordToAsciiProductNoZero(selectedComponent)))"
+              :options="changeRateChartOptions"
+              class="pa-4"
+            ></d-line-chart>
           </v-card-text>
-          <v-card-text class="d-flex-row ga-4 mini-graph-container pt-0">
-            <d-graph-component-mini-card
-              v-for="component in components"
-              :title="component"
-              :wear="[ 2, 4, 1, 0, 33, 13, 20]"
-              :selected="component === selected"
-              @select="selected = $event"
-            ></d-graph-component-mini-card>
-          </v-card-text>
+          <v-row class="pa-8 ga-4">
+            <v-col v-for="component in components" class="pa-0">
+              <d-graph-component-mini-card
+                :title="component"
+                :wear="getRates(wordToAsciiProductNoZero(component))"
+                :selected="component === selectedComponent"
+                @select="selectedComponent = $event"
+              ></d-graph-component-mini-card>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -114,9 +132,12 @@
 <script lang="ts" setup>
   import { useFobsStore } from '../stores/fobs';
   import { useMissionsStore } from '../stores/missions';
+  import { useTailsStore } from '../stores/tails';
   import { useFobToAircraftsStore } from '../stores/fobToAircrafts';
+  import { calculateChangeRate } from '../consts/helpers';
 
   const fobsPinia = useFobsStore();
+  const tailsPinia = useTailsStore();
   const missionsPinia = useMissionsStore();
   const fobToAircraftsPinia = useFobToAircraftsStore();
   
@@ -125,7 +146,8 @@
     return route.query.fobId;
   });
   const missionSet = computed(() => {
-    if (!route.query.ms) return null;
+    console.log(route.query.ms)
+    if (route.query.ms === null || route.query.ms === undefined) return null;
     return parseInt(route.query.ms);
   });
 
@@ -145,7 +167,7 @@
 
   // Only take missions in this missionset
   const missions = computed(() => {
-    if (!missionSet.value) return [];
+    if (missionSet.value === null) return [];
     return fobMissions.value
       .filter((mission) => mission.missionset === missionSet.value);
   });
@@ -170,15 +192,81 @@
     return couplings.value.find((coupling) => coupling.id === couplingIdModel.value);
   });
 
-  const selected = ref('');
   const components = ['Stabilisator', 'Landingsstel', 'Motoren', 'Radar', 'Transmissie'];
-</script>
+  const selectedComponent = ref(components[0]);
+
+  const changeRate = computed(() => {
+    return calculateChangeRate(
+      fob.value, missions.value, nTimeslots.value,
+      tailsPinia.getById(coupling.value?.aircraftId),
+    );
+  });
+
+  function getRates(multiplier) {
+    return calculateChangeRate(
+      fob.value, missions.value, nTimeslots.value,
+      tailsPinia.getById(coupling.value?.aircraftId), multiplier,
+    );
+  };
+
+  const changeRateChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 10,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  function getChartData(inputData) {
+    return {
+      labels: [...inputData.keys()],
+      datasets: [
+        {
+          borderColor: '#B71C1C',
+          data: inputData,
+        },
+      ],
+    };
+  };
+
+  const changeRateChart = computed(() => {
+    return getChartData(changeRate.value);
+  });
+
+  function wordToAsciiProductNoZero(word) {
+    let product = 1;
+    for (let i = 0; i < word.length; i++) {
+      product *= word.charCodeAt(i);
+    }
+
+    // Strip trailing zeros by dividing by 10 until no trailing zero remains
+    while (product % 10 === 0) {
+      product /= 10;
+    }
+
+    return product;
+  }
+  </script>
 
 <style lang="scss" scoped>
   .view-mission-set-container {
-    height: calc(100% - 64px)
+    height: calc(100% - 96px)
   }
   .mini-graph-container {
     max-height: 188px
+  }
+  .component {
+   border: 1px solid #D9D9D9;
   }
 </style>

@@ -2,7 +2,7 @@
   <v-card
     flat
     :class="{ 'selected-component': props.selected }"
-    class="d-flex-column justify-space-between pa-4 component"
+    class="d-flex-column justify-space-between pa-4 component flex-grow-1"
     @click="$emit('select', props.title)"
   >
     <div class="d-flex-column ga-1">
@@ -18,7 +18,7 @@
             mdi-alert
           </v-icon>
         </span>
-        <span class="text-caption mt-n1">Matig vanaf tijdslot 1</span>
+        <span class="text-caption mt-n1">{{ subtitle }}</span>
       </div>
       <div class="flex-grow-1">
         <v-sparkline
@@ -26,7 +26,7 @@
           smooth
           auto-draw
           height="90%"
-          color="error"
+          :color="color(highestWear)"
         ></v-sparkline>
       </div>
     </div>
@@ -60,7 +60,7 @@ function color(value) {
   if (!value) {
     return '#000';
   }
-  if (value > 0 && value <= 15) {
+  if (value >= 0 && value <= 15) {
     return 'success'
   }
   if (value > 15 && value <= 30) {
@@ -70,6 +70,20 @@ function color(value) {
     return 'error'
   }
 };
+
+const subtitle = computed(() => {
+  if (highestWear.value >= 0 && highestWear.value <= 15) {
+    return 'Goed';
+  }
+  if (highestWear.value > 15 && highestWear.value <= 30) {
+    const start = props.wear.findIndex((w) => w > 15);
+    return `Matig v. tijdslot ${start}`;
+  }
+  if (highestWear.value > 30) {
+    const start = props.wear.findIndex((w) => w > 30);
+    return `Nood v. tijdslot ${start}`;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -78,6 +92,6 @@ function color(value) {
    border: 1px solid #D9D9D9;
   }
  .selected-component {
-  border: 1px solid #6E6E6E;
+  border: 1px solid #6E6E6E !important;
  }
 </style>
