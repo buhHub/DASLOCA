@@ -20,6 +20,7 @@ import {
   WeaponSelector,
   AircraftSelectorCard,
   AircraftSelectorDialog,
+  GraphComponentMiniCard,
 } from './components/core'
 
 // Icons
@@ -43,6 +44,7 @@ app.component('d-create-mission-dialog', CreateMissionDialog);
 app.component('d-create-fob-missions', CreateFOBMissions);
 app.component('d-side-bar', SideBar);
 app.component('d-fob-thumb', FobThumb);
+app.component('d-graph-component-mini-card', GraphComponentMiniCard);
 
 registerPlugins(app)
 

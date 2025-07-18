@@ -18,6 +18,7 @@ declare module 'vue' {
     CreateFOBMissions: typeof import('./components/core/CreateFOBMissions.vue')['default']
     CreateMissionDialog: typeof import('./components/core/CreateMissionDialog.vue')['default']
     FobThumb: typeof import('./components/core/FobThumb.vue')['default']
+    GraphComponentMiniCard: typeof import('./components/core/GraphComponentMiniCard.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     MissionCard: typeof import('./components/core/MissionCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -5,6 +5,9 @@
         <d-aircraft-selector-dialog v-model="dialog"></d-aircraft-selector-dialog>
       </div>
       <div class="d-flex-row ga-2">
+        <d-aircraft-selector-dialog v-model="dialog"></d-aircraft-selector-dialog>
+      </div>
+      <div class="d-flex-row ga-2">
         <d-change-rate-chip></d-change-rate-chip>
         <d-change-rate-chip :value="3"></d-change-rate-chip>
         <d-change-rate-chip :value="16"></d-change-rate-chip>

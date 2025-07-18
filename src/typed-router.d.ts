@@ -23,5 +23,6 @@ declare module 'vue-router/auto-routes' {
     '/components': RouteRecordInfo<'/components', '/components', Record<never, never>, Record<never, never>>,
     '/createFob': RouteRecordInfo<'/createFob', '/createFob', Record<never, never>, Record<never, never>>,
     '/viewFob': RouteRecordInfo<'/viewFob', '/viewFob', Record<never, never>, Record<never, never>>,
+    '/viewMissionSet': RouteRecordInfo<'/viewMissionSet', '/viewMissionSet', Record<never, never>, Record<never, never>>,
   }
 }

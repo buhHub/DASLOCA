@@ -8,6 +8,7 @@ import CreateMissionDialog from './CreateMissionDialog.vue';
 import CreateFOBMissions from './CreateFOBMissions.vue';
 import SideBar from './SideBar.vue';
 import FobThumb from './FobThumb.vue';
+import GraphComponentMiniCard from './GraphComponentMiniCard.vue';
 
 export {
   AppBar,
@@ -20,4 +21,5 @@ export {
   CreateFOBMissions,
   SideBar,
   FobThumb,
+  GraphComponentMiniCard,
 };
