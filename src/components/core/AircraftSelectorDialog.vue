@@ -43,13 +43,13 @@
                 cols="3"
               >
                 <d-aircraft-selector-card
-                  :tail="aircraft.id"
+                  :tail="aircraft.tail"
                   :disabled="disableAircraft(aircraft.id)"
                   @select="$emit('select', {
                     id: props.selectedId,
                     fobId: props.fob.id,
                     missionset: props.missionset,
-                    tail: aircraft.id,
+                    aircraftId: aircraft.id,
                   })"
                 ></d-aircraft-selector-card>
               </v-col>
@@ -96,10 +96,10 @@
     return tailsPinia.getAll.filter((tail) => tail.name === typeName);
   }
 
-  function disableAircraft(tail) {
+  function disableAircraft(aircraftId) {
     return fobToAircraftsPinia.getAll
       .filter((unit) => unit.missionset === props.missionset && props.fob.id === unit.fobId)
-      .some((unit) => unit.tail === tail);
+      .some((unit) => unit.aircraft === aircraftId);
   }
 </script>
 

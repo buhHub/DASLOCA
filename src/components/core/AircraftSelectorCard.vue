@@ -59,7 +59,6 @@
 import AH64image from '../../assets/systems/AH64.svg';
 import AS532image from '../../assets/systems/AS532.svg';
 import CH47image from '../../assets/systems/CH47.svg';
-import type { log } from 'console';
 
 import { systems } from '../../consts/weapons';
 import { tails } from '../../consts/tails';
@@ -81,8 +80,6 @@ const getWeaponFromTail = computed(() => {
   if (!tails[props.tail]) return null;
   return systems[tails[props.tail]];
 })
-
-const log = (a) => console.log(a);
 </script>
 
 

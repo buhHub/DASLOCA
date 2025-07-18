@@ -273,7 +273,6 @@ function duplicateMissionSet(nMissionSet) {
 
   // Duplicate missions in that timeslot to timeslot after this
   const missionsToDuplicate = missionBucket.value.filter((mission) => mission.missionset === nMissionSet);
-  console.log(missionsToDuplicate);
   missionsToDuplicate.forEach(mission => {
     missionBucket.value.push({
       ...mission,
@@ -338,7 +337,6 @@ const rowActions = [
 
 watch(missionBucket, (nValue, oValue) => {
   emit('update:fob-missions', nValue);
-  console.log('emitted', nValue)
 }, { deep: true });
 
 watch(props.fobMissions, (nValue, oValue) => {
@@ -355,8 +353,6 @@ function uploadData() {
     });
   })
 };
-
-const log = (a) => console.log(a);
 </script>
 
 <style scoped>

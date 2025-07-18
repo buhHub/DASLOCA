@@ -4,16 +4,16 @@
     width="320"
     class="px-4"
     :class="{
-      'force-select': !isTail,
+      'force-select': !aircraft,
       'double-error': props.error,
-      'airplane-selector': isTail && !props.error,
+      'airplane-selector': aircraft && !props.error,
     }"
   >
-    <template #text v-if="isTail">
+    <template #text v-if="aircraft">
       <div class="d-flex-column gapped">
         <div class="d-flex-row ga-2 align-center">
           <div class="airplane-avatar">
-            <v-img height="40" :src="getSystemByTail(tail).image"></v-img>
+            <v-img height="40" :src="aircraft.image"></v-img>
           </div>
           <div class="d-flex-column">
             <span
@@ -26,10 +26,10 @@
               Dubbel gekozen
             </span>
             <span class="text-body-1 font-weight-medium">
-              {{ getSystemByTail(tail)?.name }}
+              {{ aircraft.name }}
             </span>
             <span class="text-body-1 font-weight-medium">
-              {{ tail }}
+              {{ aircraft.tail }}
             </span>
           </div>
         </div>
@@ -85,97 +85,28 @@
 
 <script setup lang="ts">
 import AH64image from '../../assets/systems/AH64.svg';
-import AS532image from '../../assets/systems/AS532.svg';
-import CH47image from '../../assets/systems/CH47.svg';
+  
+import { useTailsStore } from '../../stores/tails';
+const tailsPinia = useTailsStore();
 
 interface Props {
-  tail?: string | null,
+  aircraftId?: string | null,
   fobToAircraftId?: string | null,
   error?: boolean,
 };
 
 const props = withDefaults(defineProps<Props>(), {
-  tail: null,
+  aircraftId: null,
   fobToAircraftId: null,
   error: false,
 });
 
 const emit = defineEmits(['edit']);
 
-const difficultyIcon = {
-  EASY: 'mdi-circle-outline',
-  MEDIUM: 'mdi-circle-slice-4',
-  HARD: 'mdi-circle-slice-8',
-}
-
-const getSystemByTail = (tailId) => {
-  if (!isTail) return {};
-  return systems[tails[tailId]];
-}
-
-const systems = {
-  1: {
-    name: 'Chinook CH-47',
-    image: CH47image,
-  },
-  2: {
-    name: 'Apache AH-64',
-    image: AH64image,
-  },
-  3: {
-    name: 'Cougar AS-532',
-    image: AS532image,
-  },
-}
-
-const tails = {
-  'D-472': 1,
-  'D-473': 1,
-  'D-479': 1,
-  'D-480': 1,
-  'D-481': 1,
-  'D-482': 1,
-  'D-483': 1,
-  'D-484': 1,
-  'D-485': 1,
-  'D-601': 1,
-  'D-602': 1,
-  'D-603': 1,
-  'D-604': 1,
-  'D-605': 1,
-  'D-606': 1,
-  'S-419': 2,
-  'S-440': 2,
-  'S-441': 2,
-  'S-442': 2,
-  'S-444': 2,
-  'S-445': 2,
-  'S-447': 2,
-  'S-450': 2,
-  'S-453': 2,
-  'S-454': 2,
-  'S-454': 2,
-  'S-455': 2,
-  'S-456': 2,
-  'S-457': 2,
-  'S-458': 2,
-  'S-459': 2,
-  'Q-37': 3,
-  'Q-38': 3,
-  'Q-39': 3,
-  'Q-40': 3,
-  'Q-41': 3,
-  'Q-42': 3,
-  'Q-43': 3,
-  'Q-44': 3,
-  'Q-45': 3,
-  'Q-46': 3,
-  'Q-47': 3,
-  'Q-48': 3,
-}
-
-const isTail = computed(() => !!tails[props.tail])
-
+const aircraft = computed(() => {
+  if (!props.aircraftId) return null;
+  return tailsPinia.getById(props.aircraftId);
+});
 </script>
 
 

@@ -75,10 +75,6 @@
 
   const router = useRouter();
 
-  watch(fobMissions, (nValue, oValue) => {
-    console.log(nValue);
-  }, { deep: true });
-
   const disableSaveFob = computed(() => {
     return fobMissions.value.length === 0 || fobName.value.length === 0 || fobStartDate.value.length === 0;
   })

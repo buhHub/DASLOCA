@@ -46,11 +46,11 @@
           class="d-flex-row ga-2"
         >
           <d-weapon-selector
-            :tail="coupling.tail"
+            :aircraft-id="coupling.aircraftId"
             :fob-to-aircraft-id="coupling.id"
             :error="doubleAircraftTails.includes(coupling.tail)"
             @edit="openAircraftSelector(iMissionSet, $event)"
-            @remove="changeAircraft({ id: $event, tail: null })"
+            @remove="changeAircraft({ id: $event, aircraftId: null })"
           ></d-weapon-selector>
           <d-mission-card
             v-for="(iTimeslot) in [...Array(nTimeslots).keys()]"
@@ -124,7 +124,8 @@
 
   function fobAircraftsByMs(ms) {
     if (!fob.value) return null;
-    const output = fobToAircraftsPinia.getAll.filter((unit) => unit.missionset === ms && unit.fobId === fobId.value);
+    const output = fobToAircraftsPinia.getAll
+      .filter((unit) => unit.missionset === ms && unit.fobId === fobId.value);
     if (output.length > 0) return output;
 
     // Return a single empty to make it possible for the user to make a selection.
@@ -135,11 +136,11 @@
     const allCouplings = fobToAircraftsPinia.getAll.filter((unit) => unit.fobId === fobId.value);
     const counting = allCouplings.reduce((acc, sample) => ({
       ...acc,
-      [sample.tail]: (acc[sample.tail] ?? 0) + 1,
+      [sample.aircraftId]: (acc[sample.aircraftId] ?? 0) + 1,
     }), {});
     return Object.entries(counting)
-      .filter(([tail, amount]) => amount >= 2)
-      .map(([tail, amount]) => tail);
+      .filter(([aircraftId, amount]) => amount >= 2)
+      .map(([aircraftId, amount]) => aircraftId);
   })
 
   const dialog = ref(false);
@@ -154,8 +155,7 @@
 
   function changeAircraft(data) {
     if (!data) return;
-    console.log(data);
-    if (!data.tail) {
+    if (!data.aircraftId) {
       fobToAircraftsPinia.removeData(data.id);
     } else {
       if (data.id) {

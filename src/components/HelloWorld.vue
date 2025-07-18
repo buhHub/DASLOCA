@@ -26,8 +26,8 @@
       </div>
       <div class="d-flex-row ga-2">
         <d-weapon-selector></d-weapon-selector>
-        <d-weapon-selector tail="D-472"></d-weapon-selector>
-        <d-weapon-selector tail="D-472" error></d-weapon-selector>
+        <d-weapon-selector aircraft-id="t-ab"></d-weapon-selector>
+        <d-weapon-selector aircraft-id="t-ab" error></d-weapon-selector>
       </div>
       <div class="d-flex-row ga-2">
         <d-aircraft-selector-card></d-aircraft-selector-card>
