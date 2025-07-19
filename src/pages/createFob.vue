@@ -42,6 +42,7 @@
           <span class="text-body-1 font-weight-bold">2. Missiesets inrichten</span>
           <div class="scroll-wrapper">
             <d-create-fob-missions
+              ref="missionsTable"
               :fobMissions="fobMissions"
               @update:fob-missions="fobMissions = $event"
             ></d-create-fob-missions>
@@ -79,8 +80,13 @@
     return fobMissions.value.length === 0 || fobName.value.length === 0 || fobStartDate.value.length === 0;
   })
 
+  const missionsTable = ref();
+
   function saveFob() {
     if (disableSaveFob.value) return;
+    if (!missionsTable) return;
+    missionsTable.value.pruneMissionsTable();
+
     const fobId = crypto.randomUUID();
     const payload = {
       id: fobId,

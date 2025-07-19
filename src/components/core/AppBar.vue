@@ -17,7 +17,12 @@
         >
           {{ buttonText[stateLocalStorageButton] }} ({{ stateLocalStorageTimer }})
         </v-btn>
-        <v-btn variant="text" prepend-icon="mdi-airplane-cog" @click="router.push({ path: '/admin/aircrafts' })">
+        <v-btn
+          variant="text"
+          prepend-icon="mdi-airplane-cog"
+          :disabled="route.path === '/admin/aircrafts'"
+          @click="router.push({ path: '/admin/aircrafts' })"
+        >
           Beheer kisten
         </v-btn>
         <v-btn variant="text" prepend-icon="mdi-account-circle">
@@ -30,12 +35,13 @@
 
 <script setup lang="ts">
 import header from '../../assets/header.png'
+const route = useRoute();
 const router = useRouter();
 const stateLocalStorageButton = ref(0);
 const stateLocalStorageTimer = ref(0);
 
 const buttonColor = ['transparent', 'white', 'error', 'success'];
-const buttonText = ['Placeholder', 'Data resetten', 'Bevestigen?', 'Verwijderd, pagina ververst in '];
+const buttonText = ['Placeholder', 'Data resetten', 'Nogmaals om te bevestigen', 'Verwijderd, pagina ververst in '];
 const buttonIcon = ['', 'mdi-refresh', 'mdi-refresh mdi-spin', 'mdi-archive-check-outline'];
 const buttonVariant = ['', 'outlined', 'elevated', 'elevated'];
 
@@ -46,6 +52,9 @@ function decreaseTimer(parity) {
 }
 
 watch(stateLocalStorageButton, (nValue, oValue) => {
+  if (nValue === 3) {
+    localStorage.clear();
+  }
   if (nValue) {
     stateLocalStorageTimer.value = 5;
   }
@@ -55,8 +64,10 @@ watch(stateLocalStorageTimer, (nValue, oValue) => {
   if (nValue) {
     setTimeout(decreaseTimer, 1000, nValue);
   } else {
+    if (stateLocalStorageButton.value === 3) {
+      location.reload();
+    }
     stateLocalStorageButton.value = 0;
-    location.reload();
   }
 })
 </script>
