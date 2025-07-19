@@ -82,7 +82,6 @@ const aircraft = computed(() => {
 });
 </script>
 
-
 <style scoped>
 .airplane-avatar {
   width: 64px;

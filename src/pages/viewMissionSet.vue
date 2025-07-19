@@ -256,7 +256,7 @@
 
 <style lang="scss" scoped>
   .view-mission-set-container {
-    height: calc(100% - 96px)
+    height: calc(100% - 80px)
   }
   .mini-graph-container {
     max-height: 188px

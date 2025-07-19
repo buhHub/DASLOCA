@@ -9,6 +9,7 @@ import CreateFOBMissions from './CreateFOBMissions.vue';
 import SideBar from './SideBar.vue';
 import FobThumb from './FobThumb.vue';
 import GraphComponentMiniCard from './GraphComponentMiniCard.vue';
+import CreateAircraftDialog from './CreateAircraftDialog.vue';
 
 export {
   AppBar,
@@ -22,4 +23,5 @@ export {
   SideBar,
   FobThumb,
   GraphComponentMiniCard,
+  CreateAircraftDialog,
 };

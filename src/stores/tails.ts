@@ -59,10 +59,27 @@ export const useTailsStore = defineStore('tails', {
     ],
   }),
   actions: {
-    addData(d) {
-      this.data.push(d);
+    addData(d: any) {
+      this.data.push({
+        tail: d.tail,
+        type: d.type,
+        wear: d.wear,
+        id: crypto.randomUUID(),
+      });
     },
-    removeData(id) {
+    modifyData(d: any) {
+      this.data.splice(
+        this.data.findIndex((entry) => entry.id === d.id),
+        1,
+        {
+          tail: d.tail,
+          type: d.type,
+          wear: d.wear,
+          id: d.id,
+        },
+      );
+    },
+    removeData(id: string) {
       this.data = this.data.filter((item) => item.id !== id);
     },
   },

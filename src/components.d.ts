@@ -15,6 +15,7 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     ChangeRateChip: typeof import('./components/core/ChangeRateChip.vue')['default']
     copy: typeof import('./components/core/CreateMissionDialog copy.vue')['default']
+    CreateAircraftDialog: typeof import('./components/core/CreateAircraftDialog.vue')['default']
     CreateFOBMissions: typeof import('./components/core/CreateFOBMissions.vue')['default']
     CreateMissionDialog: typeof import('./components/core/CreateMissionDialog.vue')['default']
     FobThumb: typeof import('./components/core/FobThumb.vue')['default']
